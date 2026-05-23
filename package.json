@@ -16,6 +16,16 @@
       {
         "command": "motiondiv.helloWorld",
         "title": "Hello World"
+      },
+          {
+      "command": "motiondiv.convertDiv",
+      "title": "Convert Div"
+    }
+    ],
+    "keybindings":[
+      {
+        "command": "motiondiv.convertDiv",
+        "key": "ctrl+shift+m"
       }
     ]
   },
