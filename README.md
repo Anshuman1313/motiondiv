@@ -1,8 +1,4 @@
-<h1  style="font-size: 4rem;">
-  <img src="assets/icon.png" width="50" alt="MotionDiv Logo" />
-  MotionDiv
-</h1>
-
+# MotionDiv
 Convert any React `<div>` into a `motion.div` instantly.
 
 Select a `<div>` and press `Ctrl + Shift + M`.
@@ -10,7 +6,7 @@ Select a `<div>` and press `Ctrl + Shift + M`.
 Automatically handles `"framer-motion"` → `"motion/react"` imports.
 
 
-![MotionDiv Demo](assets/output2.gif)
+![MotionDiv Demo](https://raw.githubusercontent.com/Anshuman1313/motiondiv/master/assets/output2.gif)
 
 
 ## Example Workflow
@@ -41,7 +37,7 @@ Done
 
 ### Real Workflow
 
-![MotionDiv Demo](assets/output1.gif)
+![MotionDiv Demo](https://raw.githubusercontent.com/Anshuman1313/motiondiv/master/assets/output1.gif)
 
 
 
