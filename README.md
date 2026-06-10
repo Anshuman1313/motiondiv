@@ -1,71 +1,108 @@
-# motiondiv README
+<h1  style="font-size: 4rem;">
+  <img src="src/assets/icon.png" width="50" alt="MotionDiv Logo" />
+  MotionDiv
+</h1>
 
-This is the README for your extension "motiondiv". After writing up a brief description, we recommend including the following sections.
+Convert any React `<div>` into a `motion.div` instantly.
+
+Select a `<div>` and press `Ctrl + Shift + M`.
+
+Automatically handles `"framer-motion"` → `"motion/react"` imports.
+
+
+![MotionDiv Demo](./src/assets/output2.gif)
+
+
+## Example Workflow
+
+### Manual
+
+```text
+Select div
+↓
+Import motion
+↓
+Change opening tag
+↓
+Change closing tag
+↓
+Verify everything
+```
+
+### MotionDiv
+
+```text
+Select div
+↓
+Shortcut
+↓
+Done
+```
+
+### Real Workflow
+
+![MotionDiv Demo](./src/assets/output1.gif)
+
+
+
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+* Convert `div` → `motion.div`
+* Automatically adds or updates Motion imports
+* Works directly inside VS Code
+* Fast keyboard-driven workflow
+* Saves repetitive editing time
 
-For example if there is an image subfolder under your extension project workspace:
+## Installation
 
-\!\[feature X\]\(images/feature-x.png\)
+1. Open VS Code
+2. Open Extensions
+3. Search for **MotionDiv**
+4. Click Install
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Usage
 
-## Requirements
+### Keyboard Shortcut
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+```text
+Ctrl + Shift + M
+```
 
-## Extension Settings
+### Command Palette
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+```text
+MotionDiv: Convert Div to MotionDiv
+```
 
-For example:
+1. Select a div element
+2. Press `Ctrl + Shift + M`
+3. Done
 
-This extension contributes the following settings:
+## Before
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+```tsx
+<div className="card">
+  Content
+</div>
+```
 
-## Known Issues
+## After
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+```tsx
+<motion.div className="card">
+  Content
+</motion.div>
+```
 
-## Release Notes
+## What's Next?
 
-Users appreciate release notes as you update your extension.
+MotionDiv currently supports converting `div` elements.
 
-### 1.0.0
+Support for additional HTML elements is planned for future updates.
 
-Initial release of ...
+## Feedback
 
-### 1.0.1
+Found a bug or have a feature request?
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Open an issue on GitHub.

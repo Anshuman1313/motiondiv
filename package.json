@@ -1,24 +1,44 @@
 {
   "name": "motiondiv",
   "displayName": "MotionDiv",
-  "description": "Convert div elements to motion.div with a single shortcut.",
+  "description": "Convert React div elements to motion.div and handle Motion imports with a single shortcut.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.120.0"
   },
   "categories": [
-    "Snippets"
+    "Programming Languages"
   ],
+  "keywords": [
+    "motion",
+    "motiondiv",
+    "motion-react",
+    "framer-motion",
+    "react",
+    "animation",
+    "motion-div"
+  ],
+  "publisher": "Anshuman1313",
   "activationEvents": [],
   "main": "./dist/extension.js",
+  "icon": "assets/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anshuman1313/motiondiv"
+  },
+  "homepage": "https://github.com/Anshuman1313/motiondiv",
+  "bugs": {
+    "url": "https://github.com/Anshuman1313/motiondiv/issues"
+  },
+  "license":"MIT",
   "contributes": {
     "commands": [
-          {
-      "command": "motiondiv.convertDiv",
-      "title": "MotionDiv: Convert Div"
-    }
+      {
+        "command": "motiondiv.convertDiv",
+        "title": "MotionDiv: Convert Div"
+      }
     ],
-    "keybindings":[
+    "keybindings": [
       {
         "command": "motiondiv.convertDiv",
         "key": "ctrl+shift+m"
