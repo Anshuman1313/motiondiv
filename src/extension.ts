@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 	async function replaceFramerMotionImport(
 		editor: vscode.TextEditor
 	) {
-		let hasMotionImport = false
+		let hasMotionImport = false;
 
 		for (let i = 0; i < editor.document.lineCount; i++) {
 
@@ -87,10 +87,10 @@ export function activate(context: vscode.ExtensionContext) {
 		'motiondiv.convertDiv',
 		async () => {
 
-			const editor = vscode.window.activeTextEditor
+			const editor = vscode.window.activeTextEditor;
 
 			if (!editor) {
-				vscode.window.showErrorMessage("No editor opened")
+				vscode.window.showErrorMessage("No editor opened");
 				return;
 			}
 			// await ensureUseClient(editor);
@@ -149,12 +149,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 				//getting cursor after <motion.div  so that user can write initial and animate by himself
 
-				const cursorPosition = new vscode.Position(cursorLine, openingStart + "<motion.div".length)
+				const cursorPosition = new vscode.Position(cursorLine, openingStart + "<motion.div".length);
 
 				// as anchor === active as we need no selection just cursor 
-				editor.selection = new vscode.Selection(cursorPosition, cursorPosition)
+				editor.selection = new vscode.Selection(cursorPosition, cursorPosition);
 
-				return
+				return;
 
 			}
 
@@ -182,10 +182,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 				//getting cursor after <motion.div  so that user can write initial and animate by himself
 
-				const cursorPosition = new vscode.Position(cursorLine, openingStart + "<motion.div".length)
+				const cursorPosition = new vscode.Position(cursorLine, openingStart + "<motion.div".length);
 
 				// as anchor === active as we need no selection just cursor 
-				editor.selection = new vscode.Selection(cursorPosition, cursorPosition)
+				editor.selection = new vscode.Selection(cursorPosition, cursorPosition);
 
 			}
 
@@ -232,11 +232,11 @@ export function activate(context: vscode.ExtensionContext) {
 						const range = new vscode.Range(
 							new vscode.Position(i, start),
 							new vscode.Position(i, start + "</div>".length)
-						)
+						);
 
 						await editor.edit((editBuilder) => {
-							editBuilder.replace(range, "</motion.div>")
-						})
+							editBuilder.replace(range, "</motion.div>");
+						});
 
 						// vscode.window.showInformationMessage(`Multi line closing div converted at line number ${i + 1}`)
 						// vscode.window.showInformationMessage(`We changed the line to motion div at linenumber ${i + 1}`);

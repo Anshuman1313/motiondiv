@@ -1,5 +1,5 @@
 <h1  style="font-size: 4rem;">
-  <img src="src/assets/icon.png" width="50" alt="MotionDiv Logo" />
+  <img src="assets/icon.png" width="50" alt="MotionDiv Logo" />
   MotionDiv
 </h1>
 
@@ -10,7 +10,7 @@ Select a `<div>` and press `Ctrl + Shift + M`.
 Automatically handles `"framer-motion"` → `"motion/react"` imports.
 
 
-![MotionDiv Demo](./src/assets/output2.gif)
+![MotionDiv Demo](assets/output2.gif)
 
 
 ## Example Workflow
@@ -41,7 +41,7 @@ Done
 
 ### Real Workflow
 
-![MotionDiv Demo](./src/assets/output1.gif)
+![MotionDiv Demo](assets/output1.gif)
 
 
 
