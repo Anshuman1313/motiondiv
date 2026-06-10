@@ -1,25 +1,21 @@
 {
   "name": "motiondiv",
   "displayName": "MotionDiv",
-  "description": "It helps you convert <div> tage to <motion.div> tags using a single shortcut",
+  "description": "Convert div elements to motion.div with a single shortcut.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.120.0"
   },
   "categories": [
-    "Other"
+    "Snippets"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
-      {
-        "command": "motiondiv.helloWorld",
-        "title": "Hello World"
-      },
           {
       "command": "motiondiv.convertDiv",
-      "title": "Convert Div"
+      "title": "MotionDiv: Convert Div"
     }
     ],
     "keybindings":[
