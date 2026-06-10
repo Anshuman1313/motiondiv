@@ -2,7 +2,7 @@
   "name": "motiondiv",
   "displayName": "MotionDiv",
   "description": "Convert React div elements to motion.div and handle Motion imports with a single shortcut.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.120.0"
   },
