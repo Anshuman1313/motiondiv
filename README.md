@@ -6,7 +6,7 @@ Select a `<div>` and press `Ctrl + Shift + M`.
 Automatically handles `"framer-motion"` → `"motion/react"` imports.
 
 
-![MotionDiv Demo](https://raw.githubusercontent.com/Anshuman1313/motiondiv/master/assets/output2.gif)
+![MotionDiv Demo](https://raw.githubusercontent.com/Anshuman1313/motiondiv/master/assets/demo.gif)
 
 
 ## Example Workflow
@@ -37,7 +37,7 @@ Done
 
 ### Real Workflow
 
-![MotionDiv Demo](https://raw.githubusercontent.com/Anshuman1313/motiondiv/master/assets/output1.gif)
+![MotionDiv Demo](https://raw.githubusercontent.com/Anshuman1313/motiondiv/master/assets/walkthrough.gif)
 
 
 
