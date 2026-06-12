@@ -1,8 +1,8 @@
 {
   "name": "motiondiv",
   "displayName": "MotionDiv",
-  "description": "Convert React div elements to motion.div and handle Motion imports with a single shortcut.",
-  "version": "1.0.0",
+  "description": "Convert HTML and SVG elements into Motion components and automatically manage Motion imports.",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.120.0"
   },
@@ -16,7 +16,12 @@
     "framer-motion",
     "react",
     "animation",
-    "motion-div"
+    "motion-div",
+    "svg",
+    "motion-path",
+    "motion-svg",
+    "framer",
+    "motion-component"
   ],
   "publisher": "Anshuman1313",
   "activationEvents": [],
@@ -30,7 +35,7 @@
   "bugs": {
     "url": "https://github.com/Anshuman1313/motiondiv/issues"
   },
-  "license":"MIT",
+  "license": "MIT",
   "contributes": {
     "commands": [
       {

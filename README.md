@@ -1,5 +1,7 @@
 # MotionDiv
-Convert any React `<div>` into a `motion.div` instantly.
+Convert HTML and SVG elements into Motion components directly inside VS Code.
+
+You can convert a `<div>` into a `motion.div` instantly.
 
 Select a `<div>` and press `Ctrl + Shift + M`.
 
@@ -44,11 +46,45 @@ Done
 
 ## Features
 
-* Convert `div` → `motion.div`
-* Automatically adds or updates Motion imports
-* Works directly inside VS Code
-* Fast keyboard-driven workflow
-* Saves repetitive editing time
+* Convert supported HTML elements to Motion components
+* Convert supported SVG elements to Motion components
+* Automatically adds Motion import when needed
+* Preserves nested structures
+* Single-step undo support
+* Places cursor after the Motion tag for faster editing
+
+## Supported Tags
+
+### HTML Elements
+
+* div
+* section
+* article
+* header
+* footer
+* nav
+* main
+* img
+* span
+* button
+* a
+* ul
+* li
+* p
+* h1
+* h2
+* h3
+* h4
+* h5
+* h6
+
+### SVG Elements
+
+* svg
+* g
+* path
+* circle
+* rect
 
 ## Installation
 
@@ -59,43 +95,72 @@ Done
 
 ## Usage
 
-### Keyboard Shortcut
+Place your cursor on the opening tag and run the MotionDiv command using the keyboard shortcut:
 
 ```text
 Ctrl + Shift + M
 ```
 
-### Command Palette
+### Example
 
-```text
-MotionDiv: Convert Div to MotionDiv
-```
+Before:
 
-1. Select a div element
-2. Press `Ctrl + Shift + M`
-3. Done
+```jsx
 
-## Before
+<div>
 
-```tsx
-<div className="card">
-  Content
+  Hello World
+
 </div>
+
 ```
 
-## After
+After:
 
-```tsx
-<motion.div className="card">
-  Content
+```jsx
+
+<motion.div>
+
+  Hello World
+
 </motion.div>
+
 ```
 
-## What's Next?
+### SVG Example
 
-MotionDiv currently supports converting `div` elements.
+Before:
 
-Support for additional HTML elements is planned for future updates.
+```jsx
+
+<circle cx="50" cy="50" r="20"></circle>
+
+```
+
+After:
+
+```jsx
+
+<motion.circle cx="50" cy="50" r="20"></motion.circle>
+
+```
+
+## Automatic Import Handling
+
+MotionDiv automatically:
+
+* Detects existing Motion imports
+* Inserts the Motion import after existing imports
+* Places the import after `"use client"` when no imports exist
+* Inserts at the top of the file when needed
+
+
+
+## Current Limitations
+
+* Cursor should be placed on the opening tag
+* Not all Motion-supported elements are currently included
+* Advanced JSX/AST-based element detection is planned for future versions
 
 ## Feedback
 

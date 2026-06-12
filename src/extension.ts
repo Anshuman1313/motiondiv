@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-
+import { selfClosingTags, supportedTags } from "./supportedTags";
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -18,6 +18,8 @@ export function activate(context: vscode.ExtensionContext) {
 		editor: vscode.TextEditor
 	) {
 		let hasMotionImport = false;
+		let lastImportLine = -1;
+		let useClientLine = -1;
 
 		for (let i = 0; i < editor.document.lineCount; i++) {
 
@@ -49,38 +51,53 @@ export function activate(context: vscode.ExtensionContext) {
 				hasMotionImport = true;
 				break;
 			}
+			const text = editor.document.lineAt(i).text.trim();
+
+			if (text.startsWith("import ")) {
+				lastImportLine = i;
+			}
+
+			if (
+				text === '"use client"' ||
+				text === "'use client'"
+			) {
+				useClientLine = i;
+			}
 		}
 
 		if (hasMotionImport) {
 			return;
 		}
 
-		// Insert new import
-		await editor.edit(editBuilder => {
+		if (lastImportLine !== -1) {
+			// insert after last import
+			await editor.edit(editBuilder => {
 			editBuilder.insert(
-				new vscode.Position(1, 0),
+				new vscode.Position(lastImportLine + 1, 0),
 				"import { motion } from 'motion/react';\n"
 			);
 		});
-	}
-
-	async function ensureUseClient(
-		editor: vscode.TextEditor
-	) {
-		const firstLine =
-			editor.document.lineAt(0).text;
-
-		const hasUseClient =
-			firstLine.includes("use client");
-
-		if (!hasUseClient) {
-			await editor.edit(editBuilder => {
-				editBuilder.insert(
-					new vscode.Position(0, 0),
-					'"use client"\n'
-				);
-			});
+			return;
 		}
+
+		if (useClientLine !== -1) {
+			// insert after use client
+			await editor.edit(editBuilder => {
+			editBuilder.insert(
+				new vscode.Position(useClientLine + 1, 0),
+				"import { motion } from 'motion/react';\n"
+			);
+		});
+			return;
+		}
+
+		// insert at top
+		await editor.edit(editBuilder => {
+			editBuilder.insert(
+				new vscode.Position(0, 0),
+				"import { motion } from 'motion/react';\n"
+			);
+		});
 	}
 
 	const convertCommand = vscode.commands.registerCommand(
@@ -101,17 +118,68 @@ export function activate(context: vscode.ExtensionContext) {
 
 			//check that user must be on opening div so that i don't have that issue of closing div
 
-			if (!currentLine.text.includes("<div")) {
+			const match = currentLine.text.match(/<([a-z][a-z0-9]*)/);
+
+			if (!match) {
 				vscode.window.showErrorMessage(
-					"MotionDiv: Place cursor on an opening <div> tag."
+					"MotionDiv: No supported opening tag found."
+				);
+				return;
+			}
+
+			const tagName = match[1];
+
+			if (!supportedTags.has(tagName)) {
+				vscode.window.showErrorMessage(
+					`MotionDiv: ${tagName} tag is not supported.`
 				);
 				return;
 			}
 
 
 
-			const openingStart = currentLine.text.indexOf("<div");
-			const closingStart = currentLine.text.indexOf("</div>");
+			const openingStart = currentLine.text.indexOf(`<${tagName}`);
+			const closingStart = currentLine.text.indexOf(`</${tagName}>`);
+
+
+
+			//self closing tag special case 
+			const isSpecialSelfClosingTag = selfClosingTags.has(tagName);
+			if (isSpecialSelfClosingTag) {
+				for (let i = cursorLine; i < editor.document.lineCount; i++) {
+					const line = editor.document.lineAt(i);
+					if (line.text.includes("/>")) {
+						const range = new vscode.Range(
+							new vscode.Position(cursorLine, openingStart),
+							new vscode.Position(
+								cursorLine,
+								openingStart + `<${tagName}`.length
+							)
+						);
+						await editor.edit(editBuilder => {
+							editBuilder.replace(
+								range,
+								`<motion.${tagName}`
+							);
+						});
+						const cursorPosition =
+							new vscode.Position(
+								cursorLine,
+								openingStart +
+								`<motion.${tagName}`.length
+							);
+
+						editor.selection =
+							new vscode.Selection(
+								cursorPosition,
+								cursorPosition
+							);
+
+						return;
+					}
+				}
+			}
+
 
 
 			// Both opening and closing on same line ex-> <div> Heelo </div>
@@ -121,26 +189,26 @@ export function activate(context: vscode.ExtensionContext) {
 					new vscode.Position(cursorLine, openingStart),
 					new vscode.Position(
 						cursorLine,
-						openingStart + "<div".length
+						openingStart + `<${tagName}`.length
 					)
 				);
 				const closingRange = new vscode.Range(
 					new vscode.Position(cursorLine, closingStart),
 					new vscode.Position(
 						cursorLine,
-						closingStart + "</div>".length
+						closingStart + `</${tagName}>`.length
 					)
 				);
 
 				await editor.edit(editBuilder => {
 					editBuilder.replace(
 						openingRange,
-						"<motion.div"
+						`<motion.${tagName}`
 					);
 
 					editBuilder.replace(
 						closingRange,
-						"</motion.div>"
+						`</motion.${tagName}>`
 					);
 				});
 				// vscode.window.showInformationMessage(
@@ -149,7 +217,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 				//getting cursor after <motion.div  so that user can write initial and animate by himself
 
-				const cursorPosition = new vscode.Position(cursorLine, openingStart + "<motion.div".length);
+				const cursorPosition = new vscode.Position(cursorLine, openingStart + `<motion.${tagName}`.length);
 
 				// as anchor === active as we need no selection just cursor 
 				editor.selection = new vscode.Selection(cursorPosition, cursorPosition);
@@ -160,32 +228,33 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 
+			let openingRange: vscode.Range | undefined;
 			// Only Opening tag
 			if (openingStart !== -1) {
-				const range = new vscode.Range(
+				openingRange = new vscode.Range(
 					new vscode.Position(cursorLine, openingStart),
 					new vscode.Position(
 						cursorLine,
-						openingStart + "<div".length
+						openingStart + `<${tagName}`.length
 					)
 				);
 
-				await editor.edit(editBuilder => {
-					editBuilder.replace(
-						range,
-						"<motion.div"
-					);
-				});
-				// vscode.window.showInformationMessage(
-				// 	"MotionDiv: Place cursor on an opening <div> tag."
-				// );
+				// await editor.edit(editBuilder => {
+				// 	editBuilder.replace(
+				// 		openingRange,
+				// 		`<motion.${tagName}`
+				// 	);
+				// });
+				// // vscode.window.showInformationMessage(
+				// // 	"MotionDiv: Place cursor on an opening <div> tag."
+				// // );
 
-				//getting cursor after <motion.div  so that user can write initial and animate by himself
+				// //getting cursor after <motion.div  so that user can write initial and animate by himself
 
-				const cursorPosition = new vscode.Position(cursorLine, openingStart + "<motion.div".length);
+				// const cursorPosition = new vscode.Position(cursorLine, openingStart + `<motion.${tagName}`.length);
 
-				// as anchor === active as we need no selection just cursor 
-				editor.selection = new vscode.Selection(cursorPosition, cursorPosition);
+				// // as anchor === active as we need no selection just cursor 
+				// editor.selection = new vscode.Selection(cursorPosition, cursorPosition);
 
 			}
 
@@ -208,16 +277,16 @@ export function activate(context: vscode.ExtensionContext) {
 				const line = editor.document.lineAt(i); //we get the line where our cursor is now like moving downwards
 
 				//edge case if insite multi line there is a closing tag <div/>
-				const isSelfClosingDiv =  line.text.includes("<div") && line.text.includes("/>");
+				const isSelfClosingTag = line.text.includes(`<${tagName}`) && line.text.includes("/>");
 
-				if (line.text.includes("<div") && !isSelfClosingDiv) {
+				if (line.text.includes(`<${tagName}`) && !isSelfClosingTag) {
 					depth++; //we found another opeing div so we increasse the depth 
 
 					// vscode.window.showInformationMessage(`Opening DIV at line ${i + 1} and depth count ${depth}`);
 
 				}
 
-				if (line.text.includes("</div>")) {
+				if (line.text.includes(`</${tagName}>`)) {
 					depth--; //we found some closing div but we don't know if that is our matching closing div
 
 					// vscode.window.showInformationMessage(`Closing DIV at line ${i + 1} and depth count ${depth}`);
@@ -226,20 +295,35 @@ export function activate(context: vscode.ExtensionContext) {
 				if (depth === 0) {
 					// vscode.window.showInformationMessage(`Found closing div at line ${i + 1}`);
 
-					const start = line.text.indexOf("</div>");
+					const start = line.text.indexOf(`</${tagName}>`);
 
 					if (start !== -1) {
 						const range = new vscode.Range(
 							new vscode.Position(i, start),
-							new vscode.Position(i, start + "</div>".length)
+							new vscode.Position(i, start + `</${tagName}>`.length)
 						);
 
 						await editor.edit((editBuilder) => {
-							editBuilder.replace(range, "</motion.div>");
+							if (openingRange) {
+
+								editBuilder.replace(openingRange, `<motion.${tagName}`);
+								editBuilder.replace(range, `</motion.${tagName}>`);
+							}
 						});
 
 						// vscode.window.showInformationMessage(`Multi line closing div converted at line number ${i + 1}`)
 						// vscode.window.showInformationMessage(`We changed the line to motion div at linenumber ${i + 1}`);
+
+						// vscode.window.showInformationMessage(
+						// 	"MotionDiv: Place cursor on an opening <div> tag."
+						// );
+
+						//getting cursor after <motion.div  so that user can write initial and animate by himself
+
+						const cursorPosition = new vscode.Position(cursorLine, openingStart + `<motion.${tagName}`.length);
+
+						// as anchor === active as we need no selection just cursor 
+						editor.selection = new vscode.Selection(cursorPosition, cursorPosition);
 					}
 
 					break;
